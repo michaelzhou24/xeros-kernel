@@ -1,0 +1,137 @@
+
+This file is to include your testing documentation. The file is to be
+in plain text ASCII and properly spaced and edited so that when it is
+viewed on a Linux machine it is readable. Not all ASCII files created
+on a Windows machine display as expected due to the differences with
+respect to how new lines and carriage returns are treated. Line widths
+are to be limited to 80 characters.
+
+
+1. Signal Prioritization
+
+This test will test signal Prioritization.
+It will create a process that will run and setup two signal for itself with signals 10 and 20, after it will yield.
+The original process will then issue a sigkill for 10 and 20 to created process, and then yeild.
+The expectation is that signal 20 handler will run before signal 10. 
+
+output:
+                In handler!             <-- signal 20
+                In deez2()              <-- Signal 10
+                done                    <-- OG process                
+                I should be after handlers      <-- Created process
+==================================================================================================================================
+2+3. syssighandler and syskill()
+
+This test will test the ability of syssighandler and syskill by:
+        1. Creating a process (proc b) and yielding to it.
+        2. Proc b will register a handler for signal 10 to a kill function, using syssignal. It will then yield.
+        3. Original process will now call syskill on proc b and deliver signal 10. Yield to b.
+        4. B will process signal first and kill itself.
+        5. Print process list.
+The test will output a failure string in B that it should not reach as the process should kill itself before it reaches it.
+The table should not show a process with PID 3.
+
+output:
+                stopping process = 3
+                PID     State           Time
+                0       READY           0
+                1       READY           1
+                2       RUNNING         2
+                stopping process = 2
+==================================================================================================================================
+4. syswait()
+
+The test will create a process and then call syswait on its PID. 
+The test will succeed if it outputs "in basic" before "done waiting".
+
+output:
+                in basic
+                stopping process = 3
+                unblocking process pid = 2
+                done waiting
+                stopping process = 2               
+==================================================================================================================================
+5. sysopen()
+
+The test aims to test sysopen() with an invalid device number (-1, 5).
+The test will return two success if sysopen returns a DEVICE_ERROR (-1).
+
+output:
+                dev number in open: -1
+                testpassed!
+                dev number in open: 5
+                testpassed!
+                stopping process = 2
+==================================================================================================================================
+6. syswrite()
+
+The test aims to call syswrite() with an invalid file descriptor (in this test, -1). 
+If the write returns a DEVICE_ERROR (-1) then it will output a test passed.
+
+output:
+                test passed!
+                stopping process = 2
+==================================================================================================================================
+8. sysioctl()
+
+The test aims to test ioctl with invalid commands. 
+The test opens a keyboard and issues a command that is invalid.
+The test outputs a success if the ioctl returned -1. 
+
+output:
+                dev number in open: 3
+                Test success: ioctl command returned -1
+                stopping process = 2
+==================================================================================================================================
+9. sysread()
+
+This test aims to test sysread() when there are more characters buffered in kernel than the read requests.
+The test opens a keyboard, sleeps for 3 seconds to allow the user to type some characters for the keyboard to buffer,
+once the process wakes up it requests to read 2 characters, which it then outputs.
+The expected behaviour is for the buffer to only output 1 character. 
+
+output:
+                dev number in open: 3
+                Read returned: a
+                stopping process = 2
+==================================================================================================================================
+9. Zero Device read/write
+
+This test aims to test the zero device with reads and writes.
+For read, it will be given an initialized buffer and it expects the buffer to only have zeros. 
+For the write it will return the number of bytes consumed for the buffer given. 
+It will output failure if the buffer after read contains a non-zero element. 
+It will output a 'test passed' string after a write, if the write returns the same length as specified in the call.
+
+output:
+                dev number in open: 0
+                write test passed!
+                stopping process = 2
+
+==================================================================================================================================
+10. IOCTL EOF for keyboard
+
+This test aims to test the ioctl command of chaning the EOF character.
+It changes the EOF after opening the keyboard to be the char 'z'
+The user then inputs some characters <5; entering a 'z' to result in the keyboard returning before the buffer is filled
+The test will output the input and also check that the bytes returned are the same as the buffer length.
+If the input contains a 'z' char, then we know that the test failed.
+If the buffer len is the same as bytes read then we know that the keyboard did not return when given the 'z'.
+
+output:   
+        dev number in open: 3
+        Output from input: ab
+        stopping process = 2
+==================================================================================================================================
+11. Random Device read/write
+
+This test, tests read and write to the random device. 
+It expects write to return -1
+It expects a two different reads to return two random results.
+The test will output a failure if the above criteria is not met.
+For a pass, it will output a string indicating all tests passed. 
+
+output:
+            dev number in open: 1
+            Random dev tests passed!
+==================================================================================================================================

@@ -1,0 +1,21 @@
+Booting from Floppy...
+
+Loading........
+
+
+CPSC 415, 2020W1
+32 Bit Xeros -21.9.9 - Closer to beta
+Located at: 0 to d3d0
+Max addr is 4194303 3fffff
+memory inited
+dispatcher inited
+Context init called
+context inited
+device table inited
+Creating Idle Process
+create inited
+In handler!
+In deez2()
+done
+I should be after handlers
+�

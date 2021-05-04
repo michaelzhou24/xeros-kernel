@@ -1,0 +1,25 @@
+Loading........
+
+
+CPSC 415, 2020W1
+32 Bit Xeros -21.9.9 - Closer to beta
+Located at: 0 to d3d0
+Max addr is 4194303 3fffff
+memory inited
+dispatcher inited
+Context init called
+context inited
+device table inited
+Creating Idle Process
+create inited
+Setting sig for PID: 3 and signo: 10
+The pending sig is: 1024
+Got signal: 10in sigtramp
+handler address: 9298
+stopping process = 3
+PID     State           Time
+0       READY           0
+1       READY           1
+2       RUNNING         2
+stopping process = 2
+ß
